@@ -5,7 +5,10 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = control_MAC_learning.v
+PROJECT_SOURCES = control_MAC_learning_Zenectics1.v
+PROJECT_SOURCES += control_MAC_learning.v
+PROJECT_SOURCES += extract_MAC.v
+PROJECT_SOURCES += MAC_table.v
 
 ifneq ($(GATES),yes)
 

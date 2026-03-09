@@ -19,11 +19,18 @@ Explain how to use your project
 
 Annotate your weekly progress here to help us keep on track! For each week, briefly explain what you tested, what you wrote, and where you're stuck (if anywhere). This helps the team stay aligned on implementation status.
 
+March 8th: 
+- Updated and setup cloned repository of MAC_Learning_Module. Updated: info.md, info.yaml, module names. 
+- Instantiated extract_MAC and MAC_table in control_MAC_learning. Wired inputs and outputs according to provided documentation. 
+-Began Writing testbenches to test for Frame processing and MAC extraction logic.
+-Wrote testcase for repeating bytes from 0x01 - 0xFE and asserting that the proper request types, MAC address, and mvalid values are as expected.
+
+
 ## RTL Progress
 
-| Week | Notes |
+| Week | Notes | 
 |---|---|
-| March 4-10 | |
+| March 4-10 | | Verification/testbench tasks this week. RTL to begin in later weeks.
 | March 11-17 | |
 | March 18-24 | |
 | March 25 - Apr 1 | |
@@ -31,9 +38,9 @@ Annotate your weekly progress here to help us keep on track! For each week, brie
 
 ## Verification Progress
 
-| Week | Notes |
+| Week | Notes | 
 |---|---|
-| March 4-10 | |
+| March 4-10 | | 
 | March 11-17 | |
 | March 18-24 | |
 | March 25 - Apr 1 | |

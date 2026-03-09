@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title:        "Ethernet_MAC_Learning_Module"      # Project title
+  author:       "William Kim"      # Your name
+  discord:      "Zenetics1"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "Verilog Project made to teach user about MAC_Addresses for Ethernet Design."      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -11,48 +11,49 @@ project:
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_MAC_learning_yourname"
+  top_module:  "tt_um_MAC_learning_Zenetics1"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "MAC_learning.v"
-    - "MAC_table.v"
-    - "extract_MAC.v"
-    - "control_MAC_learning.v"
+  - "control_MAC_learning_Zenetics1.v"
+  - "control_MAC_learning.v"
+  - "extract_MAC.v"
+  - "MAC_table.v"
+    # aging.v will be added in phase 2 of project
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "i_frame[0]"
+  ui[1]: "i_frame[1]"
+  ui[2]: "i_frame[2]"
+  ui[3]: "i_frame[3]"
+  ui[4]: "i_frame[4]"
+  ui[5]: "i_frame[5]"
+  ui[6]: "i_frame[6]"
+  ui[7]: "i_frame[7]"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "o_MAC[0]"
+  uo[1]: "o_MAC[1]"
+  uo[2]: "o_MAC[2]"
+  uo[3]: "o_MAC[3]"
+  uo[4]: "o_MAC[4]"
+  uo[5]: "o_MAC[5]"
+  uo[6]: "o_table_st[0]"
+  uo[7]: "o_table_st[1]"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "i_fvalid"
+  uio[1]: "o_request_t[0]"
+  uio[2]: "o_request_t[1]"
+  uio[3]: "o_mvalid"
+  uio[4]: "unused"
+  uio[5]: "unused"
+  uio[6]: "unused"
+  uio[7]: "unused"
 
 # Do not change!
 yaml_version: 6
