@@ -3,6 +3,7 @@
 
 import cocotb
 import random
+import signal
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
@@ -11,7 +12,7 @@ from cocotb.triggers import ClockCycles
 
 #Test 1: Repeated frames from 0x01 - 0xFE with fvalid Always 1
 @cocotb.test()
-async def extract_MAC_ut(dut):
+async def extract_MAC_ut_1(dut):
     dut._log.info("Unit Test extract_MAC (Sweep test frame: 0x01-0xFE Repeated | fvalid Always 1) Start")
 
     #Clock period set to 125 KHz
@@ -76,7 +77,7 @@ async def extract_MAC_ut(dut):
 
 #Test 2: 0x00
 @cocotb.test()
-async def extract_MAC_ut(dut):
+async def extract_MAC_ut_2(dut):
     dut._log.info("Unit Test extract_MAC (Frame: 0x00 | fvalid Always 1) Start")
 
     #Clock period set to 125 KHz
@@ -112,7 +113,7 @@ async def extract_MAC_ut(dut):
 
 #Test 3: 0xFF
 @cocotb.test()
-async def extract_MAC_ut(dut):
+async def extract_MAC_ut_3(dut):
     dut._log.info("Unit Test extract_MAC (Frame: 0xFF | fvalid Always 1) Start")
 
     #Clock period set to 125 KHz
@@ -149,7 +150,7 @@ async def extract_MAC_ut(dut):
 
 #Test 4: Random frames from 0x00 - 0xFF with fvalid Always 1
 @cocotb.test()
-async def extract_MAC_ut(dut):
+async def extract_MAC_ut_4(dut):
     dut._log.info("Unit Test extract_MAC (Sweep test frame: 0x00-0xFF Randomized | fvalid Always 1) Start")
 
     #Clock period set to 125 KHz
@@ -215,6 +216,41 @@ async def extract_MAC_ut(dut):
 
 
 #Test 5: fvalid changes to 0 during extraction process
+@cocotb.test()
+async def extract_MAC_ut_5(dut):
+    dut._log.info("Unit Test extract_MAC (Frame: 0xFF | fvalid becomes 0) Start")
+
+    #Clock period set to 125 KHz
+    clock = Clock(dut.clk, 8, units="us")
+    cocotb.start_soon(clock.start())
+    dut._log.info("Reset values")
+    dut.fvalid.value = 0
+    dut.frame.value = 0
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("extract_MAC Behaviour")
+
+    dut.fvalid.value = 1
+
+    dut.frame.value = 0xFF
+
+    await ClockCycles(dut.clk, 3)
+
+    dut.fvalid.value = 0
+
+    assert dut.MAC_dest.value == 0x000000000000
+
+    dut._log.info("Extracted MAC Address is dropped as expected")
+
+    assert dut.request_t.value == 3
+    
+    dut._log.info("Request type matches expected value: Reserved")
+
+    assert dut.mvalid.value == 0
+
+    dut._log.info("MAC Address is not complete and not a valid address")
 
 #Test 6: Reset activated during extraction 
 
