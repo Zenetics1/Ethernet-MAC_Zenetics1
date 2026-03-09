@@ -25,7 +25,8 @@ March 8th:
 -Began Writing testbenches to test for Frame processing and MAC extraction logic.
 -Wrote testcase for repeating bytes from 0x01 - 0xFE and asserting that the proper request types, MAC address, and mvalid values are as expected.
 
-
+March 9th:
+-Created 3 new testbenches for cases 0x00, 0xFF, and randomized frames, planned out tests 5 and 6.
 ## RTL Progress
 
 | Week | Notes | 

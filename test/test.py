@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import cocotb
+import random
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
@@ -73,12 +74,149 @@ async def extract_MAC_ut(dut):
         dut._log.info("MAC Address is complete and a valid address")
 
 
-#Test 2: Test cases 0x00 and 0xFF
+#Test 2: 0x00
+@cocotb.test()
+async def extract_MAC_ut(dut):
+    dut._log.info("Unit Test extract_MAC (Frame: 0x00 | fvalid Always 1) Start")
+
+    #Clock period set to 125 KHz
+    clock = Clock(dut.clk, 8, units="us")
+    cocotb.start_soon(clock.start())
+    dut._log.info("Reset values")
+    dut.fvalid.value = 0
+    dut.frame.value = 0
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("extract_MAC Behaviour")
+
+    dut.fvalid.value = 1
+
+    dut.frame.value = 0x00
+
+    await ClockCycles(dut.clk, 6)
+
+    assert dut.MAC_dest.value == 0x000000000000
+
+    dut._log.info(f"Extracted MAC Address matches expectations for frame value {dut.MAC_dest.value}")
+    
+
+    assert dut.request_t.value == 0
+    
+    dut._log.info("Request type matches expected value: Unicast")
+
+    assert dut.mvalid.value == 1
+
+    dut._log.info("MAC Address is complete and a valid address")
+
+#Test 3: 0xFF
+@cocotb.test()
+async def extract_MAC_ut(dut):
+    dut._log.info("Unit Test extract_MAC (Frame: 0xFF | fvalid Always 1) Start")
+
+    #Clock period set to 125 KHz
+    clock = Clock(dut.clk, 8, units="us")
+    cocotb.start_soon(clock.start())
+    dut._log.info("Reset values")
+    dut.fvalid.value = 0
+    dut.frame.value = 0
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("extract_MAC Behaviour")
+
+    dut.fvalid.value = 1
+
+    dut.frame.value = 0xFF
+
+    await ClockCycles(dut.clk, 6)
+
+    assert dut.MAC_dest.value == 0xFFFFFFFFFFFF
+
+    dut._log.info(f"Extracted MAC Address matches expectations for frame value {dut.MAC_dest.value}")
+    
+
+    assert dut.request_t.value == 2
+    
+    dut._log.info("Request type matches expected value: Broadcast")
+
+    assert dut.mvalid.value == 1
+
+    dut._log.info("MAC Address is complete and a valid address")
 
 
-#Test 3: fvalid changes to 0 during extraction process
+#Test 4: Random frames from 0x00 - 0xFF with fvalid Always 1
+@cocotb.test()
+async def extract_MAC_ut(dut):
+    dut._log.info("Unit Test extract_MAC (Sweep test frame: 0x00-0xFF Randomized | fvalid Always 1) Start")
 
-#Test 4: 
+    #Clock period set to 125 KHz
+    clock = Clock(dut.clk, 8, units="us")
+    cocotb.start_soon(clock.start())
+
+    dut._log.info("Reset values")
+    randomized_frame = 0
+    expected = 0
+    cast_type = 3
+    dut.fvalid.value = 0
+    dut.frame.value = 0
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("extract_MAC Behaviour")
+
+    dut.fvalid.value = 1
+
+    for val in range(6):
+        randomized_frame = random.choice()
+        dut.frame.value = randomized_frame
+
+        expected = (expected << 8) | randomized_frame
+
+        await ClockCycles(dut.clk, 1)
+
+    assert dut.MAC_dest.value == expected
+
+    dut._log.info(f"Extracted MAC Address matches expectated: {dut.MAC_dest.value} ")
+    
+    if dut.MAC_dest.value[40] == 0 and dut.MAC_dest.value != 0xFFFFFFFFFFFF:
+        cast_type = 0
+
+        assert dut.request_t.value == cast_type
+        dut._log.info("Request type matches expected value: Unicast")
+
+    elif dut.MAC_dest.value[40] == 1 and dut.MAC_dest.value != 0xFFFFFFFFFFFF:
+        cast_type = 1
+
+        assert dut.request_t.value == cast_type
+        dut._log.info("Request type matches expected value: Multicast")
+
+    elif dut.MAC_dest.value == 0xFFFFFFFFFFFF:
+        cast_type = 2
+
+        assert dut.request_t.value == cast_type
+        dut._log.info("Request type matches expected value: Broadcast")
+
+    else:
+        cast_type = 3
+        
+        assert dut.request_t.value == cast_type
+        dut._log.info("Request type matches expected value: Reserved") 
+
+
+
+    assert dut.mvalid.value == 1
+
+    dut._log.info("MAC Address is complete and a valid address")
+
+
+
+#Test 5: fvalid changes to 0 during extraction process
+
+#Test 6: Reset activated during extraction 
 
  
 
