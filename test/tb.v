@@ -18,17 +18,30 @@ module tb ();
   reg rst_n;
   reg [7:0] frame;
   reg fvalid;
-  wire [47:0] MAC;
-  wire [1:0] table_st;
+ // wire [47:0] MAC;
+ // wire [1:0] table_st;
 
   // Instantiate control_MAC_learning:
-  control_MAC_learning user_project (
-      .i_clk    (clk),        // clock
-      .i_rstn   (rst_n),      // not reset
-      .i_frame  (frame),      // 8-bit frame input
-      .i_fvalid (fvalid),     // frame valid
-      .o_MAC    (MAC),        // 48-bit MAC address output
-      .o_table_st(table_st)   // 2-bit table status output
-  );
+  // control_MAC_learning user_project (
+  //     .i_clk    (clk),        // clock
+  //     .i_rstn   (rst_n),      // not reset
+  //     .i_frame  (frame),      // 8-bit frame input
+  //     .i_fvalid (fvalid),     // frame valid
+  //     .o_MAC    (MAC),        // 48-bit MAC address output
+  //     .o_table_st(table_st)   // 2-bit table status output
+  // );
 
+  wire[47:0] MAC_dest;
+  wire mvalid;
+  wire[1:0] resquest_t;
+  //Instantiate extract_MAC for unit testing
+    extract_MAC extraction_unit_test(
+        .i_clk(clk),    //clock
+        .i_rstn(rst_n), //not reset
+        .i_frame(frame), //8-bit frame input
+        .i_fvalid(fvalid), //frame is valid
+        .o_mvalid(mvalid), //1 = extraction complete
+        .o_MAC_dest(MAC_dest), //extracted destination address
+        .o_request_t(request_t) //type classification
+    );
 endmodule
